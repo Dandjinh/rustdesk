@@ -13,7 +13,7 @@ jobs:
       date-tag: ${{ steps.set-date.outputs.date-tag }}
     steps:
     - id: set-date
-      run: echo "::set-output name=date-tag::$(date +'%Y-%m-%d')"
+      run: echo "date-tag=build_$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
   run-flutter-nightly-build:
     needs: prepare-build-info
