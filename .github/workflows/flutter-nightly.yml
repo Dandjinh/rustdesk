@@ -7,9 +7,18 @@ on:
   workflow_dispatch:
 
 jobs:
+  prepare-build-info:
+    runs-on: ubuntu-latest
+    outputs:
+      date-tag: ${{ steps.set-date.outputs.date-tag }}
+    steps:
+    - id: set-date
+      run: echo "::set-output name=date-tag::$(date +'%Y-%m-%d')"
+
   run-flutter-nightly-build:
+    needs: prepare-build-info
     uses: ./.github/workflows/flutter-build.yml
     secrets: inherit
     with:
       upload-artifact: true
-      upload-tag: "nightly"
+      upload-tag: ${{ needs.prepare-build-info.outputs.date-tag }}
