@@ -915,9 +915,9 @@ pub fn get_custom_rendezvous_server(custom: String) -> String {
 #[inline]
 pub fn get_api_server(api: String, custom: String) -> String {
     let res = get_api_server_(api, custom);
-    // if res.starts_with("https") && res.ends_with(":21114") {
-    //     return res.replace(":21114", "");
-    // }
+    if res.starts_with("https") && res.ends_with(":21114") {
+        return res.replace(":21114", "");
+    }
     res
 }
 
