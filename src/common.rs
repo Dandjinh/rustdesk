@@ -27,7 +27,7 @@ use hbb_common::{
         self,
         time::{Duration, Instant, Interval},
     },
-    ResultType,
+    ResultType, Stream,
 };
 
 use crate::{
@@ -832,7 +832,7 @@ pub fn is_modifier(evt: &KeyEvent) -> bool {
 pub fn check_software_update() {
     if is_custom_client() {
         return;
-    } 
+    }
     let opt = config::LocalConfig::get_option(config::keys::OPTION_ENABLE_CHECK_UPDATE);
     if config::option2bool(config::keys::OPTION_ENABLE_CHECK_UPDATE, &opt) {
         std::thread::spawn(move || allow_err!(check_software_update_()));
@@ -1196,7 +1196,7 @@ pub fn pk_to_fingerprint(pk: Vec<u8>) -> String {
 
 #[inline]
 pub async fn get_next_nonkeyexchange_msg(
-    conn: &mut FramedStream,
+    conn: &mut Stream,
     timeout: Option<u64>,
 ) -> Option<RendezvousMessage> {
     let timeout = timeout.unwrap_or(READ_TIMEOUT);
