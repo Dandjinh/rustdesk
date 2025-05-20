@@ -1,15 +1,24 @@
 name: Flutter Nightly Build
 
 on:
-  schedule:
+  # schedule:
     # schedule build every night
-    - cron: "0 0 * * *"
+    # - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
+  prepare-build-info:
+    runs-on: ubuntu-latest
+    outputs:
+      date-tag: ${{ steps.set-date.outputs.date-tag }}
+    steps:
+    - id: set-date
+      run: echo "date-tag=build_$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
   run-flutter-nightly-build:
+    needs: prepare-build-info
     uses: ./.github/workflows/flutter-build.yml
     secrets: inherit
     with:
       upload-artifact: true
-      upload-tag: "nightly"
+      upload-tag: ${{ needs.prepare-build-info.outputs.date-tag }}
